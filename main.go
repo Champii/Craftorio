@@ -1,6 +1,6 @@
 package main
 
-import "factorio/game"
+import "Craftorio/game"
 
 func main() {
 	game := game.New()

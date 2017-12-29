@@ -35,6 +35,7 @@ func (this *Miner) Tick() {
 
 func (this *Miner) Action() {
 	resources := this.Chunk.GetTile(this.X, this.Y).Resources
+
 	for i, resource := range resources {
 		if resource.(*Resource).Amount == 0 {
 			resources = append(resources[:i], resources[i+1:]...)
@@ -42,7 +43,9 @@ func (this *Miner) Action() {
 			continue
 		}
 
+		// Fixme
 		this.Output(resource.(*Resource).Spawn())
+
 		return
 	}
 }

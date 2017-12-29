@@ -40,6 +40,8 @@ func (this *Game) Init() {
 	NewMiner(chunk, 0, 16, SOUTH)
 	NewRoll(chunk, 0, 17, SOUTH)
 	NewRoll(chunk, 0, 18, SOUTH)
+	NewRoll(chunk, 0, 19, SOUTH)
+	NewRoll(chunk, 0, 20, SOUTH)
 
 	// chunk.Print()
 	// this.log.Info(chunk)

@@ -38,12 +38,18 @@ func (this *BaseMachine) Input(obj Object) {
 	obj.SetY(this.Y)
 
 	GAME.Broadcast(obj)
-
 	this.In <- obj
 }
 
 func (this *BaseMachine) Output(obj Object) {
 	outMachine := this.Out.Machine
+
+	x, y := this.Chunk.GetAdjacentPos(this, this.Orientation)
+
+	obj.SetX(x)
+	obj.SetY(y)
+
+	GAME.Broadcast(obj)
 
 	if outMachine != nil {
 		outMachine.Input(obj)

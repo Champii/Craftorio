@@ -187,8 +187,8 @@ const createItem = (item: any) => {
 
   const a:any = circle
   a.vx = 0;
-  // a.vy = 0;
-  a.vy = tileSize / 60;
+  a.vy = 0;
+  // a.vy = tileSize / 60;
 
   main.addChild(circle);
 

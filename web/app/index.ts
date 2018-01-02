@@ -1,3 +1,9 @@
+// import 'requirejs';
+// import * as PIXI from 'pixi.js';
+// import * as _ from 'lodash';
+
+console.log('test');
+
 const ws = new WebSocket('ws://' + window.location.host + '/ws');
 
 const objects:{ [index:number] : PIXI.Sprite} = {};
@@ -91,8 +97,8 @@ const renderChunk = (chunk:any) => {
 
   const chunkContainer = new PIXI.Container()
 
-  _.forEach(chunk.data, row => {
-    _.forEach(row, tile => {
+  _.forEach(chunk.data, (row: any) => {
+    _.forEach(row, (tile: any) => {
       createTile(chunkContainer, x, y, tile)
       x += tileSize;
     })
@@ -238,11 +244,12 @@ const update = (obj:any, delta: number) => {
 const gameLoop = (delta:number) => {
   _(objects)
     .values()
-    .forEach(obj => update(obj, delta))
+    .forEach((obj: any) => update(obj, delta))
   ;
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
+  console.log('dom downloaded');
   app = new PIXI.Application({
     // width: 700,
     // height: 700,

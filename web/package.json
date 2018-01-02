@@ -11,6 +11,12 @@
   "dependencies": {
     "@types/socket.io": "^1.4.31",
     "@types/socket.io-client": "^1.4.32",
-    "pixi.js": "^4.6.2"
+    "lodash": "^4.17.4",
+    "pixi.js": "^4.6.2",
+    "requirejs": "^2.3.5"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.91",
+    "@types/pixi.js": "^4.6.2"
   }
 }

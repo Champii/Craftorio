@@ -11,13 +11,11 @@ type Player struct {
 
 func NewPlayer(chunk *Chunk, socket *websocket.Conn) *Player {
 	player := &Player{
-		BaseObject: *NewBaseObject(0, 0, chunk, NORTH, "Player", TYPE_PLAYER),
+		BaseObject: *NewBaseObject(5, 5, chunk, NORTH, "Player", TYPE_PLAYER),
 		Socket:     socket,
 	}
 
-	chunks := chunk.Map.GetAllChunksAround(player)
-
-	for _, chunk := range chunks {
+	for _, chunk := range chunk.Map.GetAllChunksAround(player) {
 		chunk.Subscribe(player)
 	}
 
@@ -25,9 +23,7 @@ func NewPlayer(chunk *Chunk, socket *websocket.Conn) *Player {
 }
 
 func (this *Player) UnsubscribeAll() {
-	chunks := this.Chunk.Map.GetAllChunksAround(this)
-
-	for _, chunk := range chunks {
+	for _, chunk := range this.Chunk.Map.GetAllChunksAround(this) {
 		chunk.Unsubscribe(this)
 	}
 }

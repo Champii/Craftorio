@@ -51,6 +51,7 @@ func (this *Game) handleConnections(c echo.Context) error {
 
 func (this *Game) Broadcast(obj Object) {
 	chunks := this.Map.GetAllChunksAround(obj)
+
 	players := make(map[int]*Player)
 
 	for _, chunk := range chunks {

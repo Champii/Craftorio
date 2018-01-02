@@ -40,6 +40,7 @@ func (this *Map) GetAllChunksAround(obj Object) (res []*Chunk) {
 
 	for x := chunk.X - chunkRange; x < chunk.X+chunkRange; x++ {
 		for y := chunk.Y - chunkRange; y < chunk.Y+chunkRange; y++ {
+			// Fixme: Here x and y have to be guarded if x or y < 0 or > CHUNK_SIZE
 			res = append(res, this.GetChunk(x, y))
 		}
 	}

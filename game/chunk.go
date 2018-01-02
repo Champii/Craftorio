@@ -49,7 +49,7 @@ func (this *Chunk) Generate() {
 			height := this.Map.Noise.Eval2(xFloat, yFloat)
 
 			if height >= 0.3 {
-				NewResource(this, x, y, COAL, 10)
+				NewResource(this, x, y, COAL, 20)
 				// game.log.Info("Height", height, tile)
 			}
 

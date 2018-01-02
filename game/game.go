@@ -2,14 +2,19 @@ package game
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	logging "github.com/op/go-logging"
 )
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 type Game struct {
 	log     *logging.Logger
@@ -50,17 +55,26 @@ func (this *Game) Init() {
 	// this.Map.GetChunk(0, -3).Print()
 
 	go this.loop()
+	e := echo.New()
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	// e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://127.0.0.1:4200", "http://127.0.0.1:8080"},
+		AllowCredentials: true,
+		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	}))
 
-	http.HandleFunc("/ws", this.handleConnections)
-	http.Handle("/", http.FileServer(http.Dir("./web")))
+	e.GET("/ws", this.handleConnections)
+	e.Static("/", "./web/dist")
 
 	this.log.Info("Web: Starting HTTP Server on :8080...")
+	e.Logger.Fatal(e.Start(":8080"))
+	// if err := http.ListenAndServe(":8080", nil); err != nil {
+	// 	this.log.Error("Web: Server error: ", err)
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		this.log.Error("Web: Server error: ", err)
-
-		os.Exit(1)
-	}
+	// 	os.Exit(1)
+	// }
 
 	this.loop()
 

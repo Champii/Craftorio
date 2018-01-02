@@ -2,7 +2,8 @@ package game
 
 import (
 	"log"
-	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 type Req interface {
@@ -14,11 +15,11 @@ type GameAnswer struct {
 	Data    interface{} `json:"data"`
 }
 
-func (this *Game) handleConnections(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
+func (this *Game) handleConnections(c echo.Context) error {
+	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 
 	if err != nil {
-		log.Fatal(err)
+		c.Logger().Error(err)
 	}
 
 	defer ws.Close()
@@ -31,17 +32,21 @@ func (this *Game) handleConnections(w http.ResponseWriter, r *http.Request) {
 		err := ws.ReadJSON(&req)
 
 		if err != nil {
-			log.Printf("Read error: %v", err)
+			c.Logger().Error(err)
 
 			player.UnsubscribeAll()
-
 			delete(this.Players, ws)
 
 			break
 		}
 
+		// fmt.Println("Got", t, string(arr))
+
 		this.handleIncomingMessage(player, req)
+
+		// broadcast <- this.JSONMarshal(this.Map.GetChunk(0, 0))
 	}
+	return nil
 }
 
 func (this *Game) Broadcast(obj Object) {

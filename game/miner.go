@@ -49,9 +49,3 @@ func (this *Miner) Action() {
 		return
 	}
 }
-
-// func (this *Miner) Connect() {
-// 	this.BaseMachine.Connect()
-
-// 	this.Input = []Object{}
-// }

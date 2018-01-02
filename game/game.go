@@ -1,7 +1,6 @@
 package game
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -50,7 +49,6 @@ func (this *Game) Init() {
 	// this.Map.GetChunk(0, -2).Print()
 	// this.Map.GetChunk(0, -3).Print()
 
-	go this.handleMessages()
 	go this.loop()
 
 	http.HandleFunc("/ws", this.handleConnections)
@@ -84,132 +82,4 @@ func (this *Game) loop() {
 
 		time.Sleep(time.Microsecond * 100)
 	}
-}
-
-type Req interface {
-	Resolve() []byte
-}
-
-type GameAnswer struct {
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
-// type ChunkRequest struct {
-// 	X int `json:"x"`
-// 	Y int `json:"y"`
-// }
-
-// func (this *ChunkRequest) Resolve() GameAnswer {
-// 	return GameAnswer{
-// 		Message: "chunk",
-// 		Data:    GAME.Map.GetChunk(this.X, this.Y),
-// 	}
-// }
-
-func (this *Game) handleConnections(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer ws.Close()
-
-	player := NewPlayer(this.Map.GetChunk(0, 0), ws)
-	this.Players[ws] = player
-
-	for {
-		var req map[string]interface{}
-		err := ws.ReadJSON(&req)
-
-		if err != nil {
-			log.Printf("Read error: %v", err)
-
-			player.UnsubscribeAll()
-			delete(this.Players, ws)
-
-			break
-		}
-
-		// fmt.Println("Got", t, string(arr))
-
-		this.handleIncomingMessage(player, req)
-
-		// broadcast <- this.JSONMarshal(this.Map.GetChunk(0, 0))
-	}
-}
-
-func (this *Game) Broadcast(obj Object) {
-	chunks := this.Map.GetAllChunksAround(obj)
-	players := make(map[int]*Player)
-
-	for _, chunk := range chunks {
-		for _, player := range chunk.Subscribers {
-			players[player.Id] = player
-		}
-	}
-
-	for _, player := range players {
-		this.SendTo(player, obj)
-	}
-}
-
-func (this *Game) SendTo(player *Player, obj interface{}) {
-	err := player.Socket.WriteJSON(obj)
-
-	if err != nil {
-		log.Printf("Send error: %v", err)
-
-		// player.Socket.Close()
-
-		// player.UnsubscribeAll()
-		// delete(this.Players, player.Socket)
-	}
-}
-
-func (this *Game) handleMessages() {
-	// for {
-	// 	msg := <-broadcast
-
-	// 	for client := range clients {
-	// 		err := client.WriteMessage(websocket.TextMessage, []byte(msg))
-
-	// 		if err != nil {
-	// 			log.Printf("error: %v", err)
-
-	// 			client.Close()
-
-	// 			delete(clients, client)
-	// 		}
-	// 	}
-	// }
-}
-
-func (this *Game) handleIncomingMessage(player *Player, req map[string]interface{}) {
-
-	switch req["message"] {
-	case "ready":
-		chunks := this.Map.GetAllChunksAround(player)
-
-		this.SendTo(player, player)
-
-		for _, chunk := range chunks {
-			this.SendTo(player, chunk)
-		}
-
-	case "player_move":
-		tile := player.Chunk.GetAdjacentTile(player, Orientation(req["data"].(map[string]interface{})["ori"].(float64)))
-
-		player.X = tile.X
-		player.Y = tile.Y
-		player.Chunk = tile.Chunk
-
-		this.Broadcast(player)
-		// var res
-		// mapstructure.Decode(req, &req)
-
-	}
-	// res := result.Resolve()
-
 }

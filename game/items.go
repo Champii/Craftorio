@@ -10,9 +10,6 @@ func NewCoalItem(chunk *Chunk, x, y int) *CoalItem {
 	}
 
 	GAME.Broadcast(coalItem)
-	// chunk.AddObject(coalItem)
-
-	// coalItem.Connect()
 
 	return coalItem
 }

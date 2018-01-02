@@ -68,10 +68,6 @@ func (this *BaseMachine) Tick() bool {
 	return false
 }
 
-// func (this *BaseMachine) Action() {
-// 	fmt.Println("LOL")
-// }
-
 func (this *BaseMachine) loop() {
 	for obj := range this.In {
 		this.Buffer = append(this.Buffer, obj)

@@ -2,6 +2,7 @@
   "extends": ["tslint:latest"],
   "rules": {
     "quotemark": [true, "single"],
-    "interface-name": false
+    "interface-name": false,
+    "no-console": [true, "log"]
   }
 }

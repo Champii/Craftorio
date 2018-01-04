@@ -3,4 +3,8 @@ export enum ORIENTATION {
   WEST,
   SOUTH,
   EAST,
+  NORTH_EAST,
+  NORTH_WEST,
+  SOUTH_EAST,
+  SOUTH_WEST,
 }

@@ -284,6 +284,12 @@
     "@types/tapable" "*"
     "@types/uglify-js" "*"
 
+"@types/websocket@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/websocket/-/websocket-0.0.35.tgz#7734476e187660974d1d308213547bb3e21fd4b6"
+  dependencies:
+    "@types/node" "*"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -4454,6 +4460,10 @@ tough-cookie@~2.3.0:
 trim-newlines@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
+
+ts-keycode-enum@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/ts-keycode-enum/-/ts-keycode-enum-1.0.4.tgz#b7e35bf73d669b561333d5de9a51861e4803ad3e"
 
 ts-node@^4.1.0:
   version "4.1.0"

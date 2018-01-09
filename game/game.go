@@ -46,14 +46,6 @@ func (this *Game) Init() {
 
 	fmt.Println(recipes)
 
-	test := AmountMap{
-		IRON:  18,
-		STONE: 8,
-	}
-	fmt.Println(test)
-	fmt.Println(test.Reserve(recipes[MINER_BURNER], 2))
-	fmt.Println(test)
-
 	this.Map = NewMap()
 
 	// generate map

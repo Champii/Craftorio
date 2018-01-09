@@ -28,11 +28,17 @@ func NewPlayer(chunk *Chunk, socket *websocket.Conn) *Player {
 }
 
 func (this *Player) Craft(kind Kind, amount int) bool {
-	if !this.Inventory.Reserve(recipes[kind], amount) {
+	reserved := NewReserved()
+
+	if !this.Inventory.Reserve(recipes[kind], amount, reserved) {
 		return false
 	}
 
-	this.CraftQueue.Add(QueueItem{kind, amount})
+	reserved.ToCraft[len(reserved.ToCraft)-1].ToInventory = true
+
+	for _, queueItem := range reserved.ToCraft {
+		this.CraftQueue.Add(queueItem)
+	}
 
 	GAME.SendTo(this, this.Inventory)
 	GAME.SendTo(this, this.CraftQueue)

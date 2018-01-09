@@ -5,8 +5,9 @@ import (
 )
 
 type QueueItem struct {
-	Kind   Kind
-	Amount int
+	Kind        Kind
+	Amount      int
+	ToInventory bool
 }
 
 type CraftQueue struct {
@@ -39,14 +40,17 @@ func (this *CraftQueue) Craft() {
 			<-this.Timer.C
 
 			if first.Amount > 1 {
-				first.Amount--
+				this.Queue[0].Amount--
 			} else {
 				this.Queue = this.Queue[1:]
 			}
 
-			this.player.Inventory[first.Kind]++
+			if first.ToInventory {
+				this.player.Inventory[first.Kind]++
 
-			GAME.SendTo(this.player, this.player.Inventory)
+				GAME.SendTo(this.player, this.player.Inventory)
+			}
+
 			GAME.SendTo(this.player, this.player.CraftQueue)
 
 			this.Craft()

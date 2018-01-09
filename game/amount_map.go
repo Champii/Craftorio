@@ -2,6 +2,17 @@ package game
 
 type AmountMap map[Kind]int
 
+type Reserved struct {
+	Spent   AmountMap
+	ToCraft []QueueItem
+}
+
+func NewReserved() *Reserved {
+	return &Reserved{
+		Spent: make(AmountMap),
+	}
+}
+
 func (this AmountMap) Restore(old AmountMap) {
 	for kind, amount := range old {
 		this[kind] = amount
@@ -21,14 +32,14 @@ func (this AmountMap) Save() AmountMap {
 func (this AmountMap) CanReserve(recipe *Recipe, quantity int) bool {
 	old := this.Save()
 
-	res := this.Reserve(recipe, quantity)
+	res := this.Reserve(recipe, quantity, NewReserved())
 
 	this.Restore(old)
 
 	return res
 }
 
-func (this AmountMap) Reserve(recipe *Recipe, quantity int) bool {
+func (this AmountMap) Reserve(recipe *Recipe, quantity int, reserved *Reserved) bool {
 	old := this.Save()
 
 	for kind, amount := range recipe.Items {
@@ -43,16 +54,20 @@ func (this AmountMap) Reserve(recipe *Recipe, quantity int) bool {
 				return false
 			}
 
-			if !this.Reserve(innerRecipe, amount*quantity) {
+			if !this.Reserve(innerRecipe, amount*quantity, reserved) {
 				this.Restore(old)
 
 				return false
 			}
 		} else {
 			this[kind] -= amount * quantity
+
+			reserved.Spent[kind] += amount * quantity
 		}
 
 	}
+
+	reserved.ToCraft = append(reserved.ToCraft, QueueItem{recipe.Kind, quantity, false})
 
 	return true
 }

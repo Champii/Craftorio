@@ -29,6 +29,17 @@ func (this *Game) handleConnections(c echo.Context) error {
 
 	this.Players[ws] = player
 
+	// test crafting
+
+	// player.Inventory = AmountMap{
+	// 	IRON:  9,
+	// 	STONE: 5,
+	// }
+
+	// player.Craft(MINER_BURNER, 1)
+
+	//
+
 	for {
 		var req map[string]interface{}
 

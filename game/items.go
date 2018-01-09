@@ -1,5 +1,9 @@
 package game
 
+type Item struct {
+	Obj Object
+}
+
 type CoalItem struct {
 	BaseObject
 }

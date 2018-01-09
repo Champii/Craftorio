@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/labstack/echo"
@@ -25,26 +26,25 @@ func (this *Game) handleConnections(c echo.Context) error {
 	defer ws.Close()
 
 	player := NewPlayer(this.Map.GetChunk(0, 0), ws)
+
 	this.Players[ws] = player
 
 	for {
 		var req map[string]interface{}
+
 		err := ws.ReadJSON(&req)
 
 		if err != nil {
 			c.Logger().Error(err)
 
 			player.UnsubscribeAll()
+
 			delete(this.Players, ws)
 
 			break
 		}
 
-		// fmt.Println("Got", t, string(arr))
-
 		this.handleIncomingMessage(player, req)
-
-		// broadcast <- this.JSONMarshal(this.Map.GetChunk(0, 0))
 	}
 	return nil
 }
@@ -83,6 +83,11 @@ func (this *Game) handleIncomingMessage(player *Player, req map[string]interface
 
 		for _, chunk := range chunks {
 			this.SendTo(player, chunk)
+		}
+
+	case "player_craft":
+		if !player.Craft(req["data"].(map[string]interface{})["kind"].(Kind), 1) {
+			fmt.Println("CANNOT CRAFT")
 		}
 
 	case "player_move":

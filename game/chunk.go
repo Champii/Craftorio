@@ -77,8 +77,20 @@ func (this *Chunk) AddObject(obj Object) {
 	this.Data[obj.GetY()][obj.GetX()].Add(obj)
 }
 
+func (this *Chunk) InitTile(t *Tile, x, y int) {
+	t.Chunk = this
+	t.X = x
+	t.Y = y
+}
+
 func (this *Chunk) GetTile(x, y int) *Tile {
-	return &this.Data[y][x]
+	t := &this.Data[y][x]
+
+	if t.Chunk == nil {
+		this.InitTile(t, x, y)
+	}
+
+	return t
 }
 
 func (this *Chunk) GetAdjacentChunk(orientation Orientation) *Chunk {
@@ -116,6 +128,8 @@ func (this *Chunk) GetAdjacentTile(obj Object, orientation Orientation) *Tile {
 		x = relativePosToChunk(x)
 		y = relativePosToChunk(y)
 	}
+
+	fmt.Println("X, Y", x, y)
 
 	return c.GetTile(x, y)
 }

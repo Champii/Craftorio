@@ -2,23 +2,17 @@ package game
 
 type ResourceType int
 
-const (
-	COAL ResourceType = iota
-	IRON
-	COPER
-)
-
 type IResource interface {
 	Object
 }
 
 type Resource struct {
 	BaseObject
-	ResourceType ResourceType `json:"resourceType"`
-	Amount       int          `json:"amount"`
+	Kind   Kind `json:"resourceType"`
+	Amount int  `json:"amount"`
 }
 
-func NewResource(chunk *Chunk, x, y int, resourceType ResourceType, amount int) *Resource {
+func NewResource(chunk *Chunk, x, y int, resourceType Kind, amount int) *Resource {
 	res := &Resource{
 		BaseObject: BaseObject{
 			X:           x,
@@ -29,8 +23,8 @@ func NewResource(chunk *Chunk, x, y int, resourceType ResourceType, amount int) 
 			Type:        TYPE_RESOURCE,
 			UserId:      0,
 		},
-		ResourceType: resourceType,
-		Amount:       amount,
+		Kind:   resourceType,
+		Amount: amount,
 	}
 
 	chunk.AddObject(res)
@@ -39,7 +33,7 @@ func NewResource(chunk *Chunk, x, y int, resourceType ResourceType, amount int) 
 }
 
 func (this *Resource) Spawn() IResource {
-	switch this.ResourceType {
+	switch this.Kind {
 	case COAL:
 		this.Amount--
 		return NewCoalItem(this.Chunk, this.X, this.Y)

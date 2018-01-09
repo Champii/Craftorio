@@ -64,11 +64,17 @@ export class Game {
 
     new KeyboardService(Key.S)
       .setAction(() => {
-        app.stage.position.y -= playerSpeed;
-        playerService.moveDown(playerSpeed);
+        socket.send(JSON.stringify({
+          message: 'player_move',
+          data: {
+            ori: ORIENTATION.SOUTH,
+          }
+        }))
+        // app.stage.position.y -= playerSpeed;
+        // playerService.moveDown(playerSpeed);
       })
       .setReleaseAction(() => {
-        playerService.idleDown();
+        // playerService.idleDown();
       });
 
     new KeyboardService(Key.D)

@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -23,7 +24,8 @@ type Game struct {
 }
 
 var (
-	GAME *Game
+	GAME    *Game
+	recipes RecipeBook = make(RecipeBook)
 )
 
 func New() *Game {
@@ -36,6 +38,22 @@ func New() *Game {
 }
 
 func (this *Game) Init() {
+	err := SetupRecipes("./config/recipes.yml")
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(recipes)
+
+	test := AmountMap{
+		IRON:  18,
+		STONE: 8,
+	}
+	fmt.Println(test)
+	fmt.Println(test.Reserve(recipes[MINER_BURNER], 2))
+	fmt.Println(test)
+
 	this.Map = NewMap()
 
 	// generate map

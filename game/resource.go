@@ -8,7 +8,7 @@ type IResource interface {
 
 type Resource struct {
 	BaseObject
-	Kind   Kind `json:"resourceType"`
+	Kind   Kind `json:"kind"`
 	Amount int  `json:"amount"`
 }
 

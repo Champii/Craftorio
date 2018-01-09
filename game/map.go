@@ -9,7 +9,7 @@ import (
 const chunkRange = 1
 
 type Map struct {
-	Noise  *opensimplex.Noise
+	Noises map[Kind]*opensimplex.Noise
 	Chunks map[int]map[int]*Chunk
 }
 
@@ -49,9 +49,28 @@ func (this *Map) GetAllChunksAround(obj Object) (res []*Chunk) {
 }
 
 func NewMap() *Map {
-	rand.Seed(4244)
-	return &Map{
-		Noise:  opensimplex.NewWithSeed(rand.Int63()),
+	m := &Map{
+		Noises: make(map[Kind]*opensimplex.Noise),
 		Chunks: make(map[int]map[int]*Chunk),
 	}
+
+	var seed int64 = 4244
+
+	rand.Seed(seed)
+	m.Noises[COAL] = opensimplex.NewWithSeed(rand.Int63())
+	seed++
+
+	rand.Seed(seed)
+	m.Noises[IRON] = opensimplex.NewWithSeed(rand.Int63())
+	seed++
+
+	rand.Seed(seed)
+	m.Noises[COPPER] = opensimplex.NewWithSeed(rand.Int63())
+	seed++
+
+	rand.Seed(seed)
+	m.Noises[STONE] = opensimplex.NewWithSeed(rand.Int63())
+	seed++
+
+	return m
 }

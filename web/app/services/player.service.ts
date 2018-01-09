@@ -200,16 +200,16 @@ export class PlayerService {
 
 
 
-    // const xDiff = (player.x * Config.tileSize) - existing.x;
-    // const yDiff = (player.y * Config.tileSize) - existing.y;
+    const xDiff = (player.x * Config.tileSize) - existing.x;
+    const yDiff = (player.y * Config.tileSize) - existing.y;
 
-    // this.move(xDiff, yDiff);
+    this.move(xDiff, yDiff);
 
-    // this.app.stage.position.x -= xDiff;
-    // this.app.stage.position.y -= yDiff;
+    this.app.stage.position.x -= xDiff;
+    this.app.stage.position.y -= yDiff;
 
 
-    this.moveToward(ORIENTATION.SOUTH)
+    // this.moveToward(ORIENTATION.SOUTH)
   }
 
   private reloadPlayerFrames(frames: PIXI.Texture[]): void {

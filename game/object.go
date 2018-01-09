@@ -20,6 +20,8 @@ type Object interface {
 	GetType() Type
 	String() string
 
+	GetAdjacentPos(orientation Orientation) (x, y int)
+
 	SetX(int)
 	SetY(int)
 }
@@ -93,4 +95,22 @@ func (this *BaseObject) SetChunk(chunk *Chunk) {
 }
 
 func (this *BaseObject) Connect() {
+}
+
+func (this *BaseObject) GetAdjacentPos(orientation Orientation) (x, y int) {
+	x = this.X
+	y = this.Y
+
+	switch orientation {
+	case NORTH:
+		y -= 1
+	case SOUTH:
+		y += 1
+	case WEST:
+		x -= 1
+	case EAST:
+		x += 1
+	}
+
+	return
 }

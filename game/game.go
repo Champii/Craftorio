@@ -70,7 +70,12 @@ func (this *Game) Init() {
 	e.Use(middleware.Recover())
 	// e.Use(middleware.CORS())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://127.0.0.1:4200", "http://127.0.0.1:8080"},
+		AllowOrigins: []string{
+			"http://127.0.0.1:4200",
+			"http://127.0.0.1:8080",
+			"http://192.168.1.70:8080",
+			"http://192.168.1.70:4200",
+		},
 		AllowCredentials: true,
 		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
 	}))

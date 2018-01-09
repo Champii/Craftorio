@@ -77,9 +77,16 @@ func (this *Game) Broadcast(obj Object) {
 }
 
 func (this *Game) SendTo(player *Player, obj interface{}) {
+	player.Lock()
+	defer player.Unlock()
+
 	err := player.Socket.WriteJSON(obj)
 
 	if err != nil {
+		player.UnsubscribeAll()
+
+		delete(this.Players, player.Socket)
+
 		log.Printf("Send error: %v", err)
 	}
 }
@@ -96,17 +103,15 @@ func (this *Game) handleIncomingMessage(player *Player, req map[string]interface
 			this.SendTo(player, chunk)
 		}
 
+	case "build":
+
 	case "player_craft":
 		if !player.Craft(req["data"].(map[string]interface{})["kind"].(Kind), 1) {
 			fmt.Println("CANNOT CRAFT")
 		}
 
 	case "player_move":
-		tile := player.Chunk.GetAdjacentTile(player, Orientation(req["data"].(map[string]interface{})["ori"].(float64)))
-
-		player.X = tile.X
-		player.Y = tile.Y
-		player.Chunk = tile.Chunk
+		player.Move(Orientation(req["data"].(map[string]interface{})["ori"].(float64)))
 
 		this.Broadcast(player)
 	}

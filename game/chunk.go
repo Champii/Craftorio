@@ -6,7 +6,7 @@ import (
 
 const (
 	CHUNK_SIZE       = 32
-	GENERATION_SCALE = 24
+	GENERATION_SCALE = 20
 )
 
 type Chunk struct {
@@ -40,21 +40,32 @@ func (this *Chunk) Unsubscribe(player *Player) {
 	delete(this.Subscribers, player.Id)
 }
 
-func (this *Chunk) Generate() {
+func (this *Chunk) GenerateResource(kind Kind, amount int) {
 	for x, rows := range this.Data {
-		for y, _ := range rows {
+		for y, tile := range rows {
+			if len(tile.Resources) > 0 {
+				continue
+			}
+
 			xFloat := float64(x+(CHUNK_SIZE*this.X)) / float64(GENERATION_SCALE)
 			yFloat := float64(y+(CHUNK_SIZE*this.Y)) / float64(GENERATION_SCALE)
 
-			height := this.Map.Noise.Eval2(xFloat, yFloat)
+			height := this.Map.Noises[kind].Eval2(xFloat, yFloat)
 
-			if height >= 0.3 {
-				NewResource(this, x, y, COAL, 20)
+			if height >= 0.7 {
+				NewResource(this, x, y, kind, amount)
 				// game.log.Info("Height", height, tile)
 			}
 
 		}
 	}
+}
+
+func (this *Chunk) Generate() {
+	this.GenerateResource(COAL, 20)
+	this.GenerateResource(IRON, 20)
+	this.GenerateResource(COPPER, 20)
+	this.GenerateResource(STONE, 20)
 }
 
 func (this *Chunk) Print() {
@@ -94,7 +105,7 @@ func (this *Chunk) GetTile(x, y int) *Tile {
 }
 
 func (this *Chunk) GetAdjacentChunk(orientation Orientation) *Chunk {
-	x, y := this.GetAdjacentPos(&BaseObject{X: this.X, Y: this.Y}, orientation)
+	x, y := (&BaseObject{X: this.X, Y: this.Y}).GetAdjacentPos(orientation)
 
 	return this.Map.GetChunk(x, y)
 }
@@ -118,7 +129,7 @@ func (this *Chunk) GetAdjacentPos(obj Object, orientation Orientation) (x, y int
 }
 
 func (this *Chunk) GetAdjacentTile(obj Object, orientation Orientation) *Tile {
-	x, y := this.GetAdjacentPos(obj, orientation)
+	x, y := obj.GetAdjacentPos(orientation)
 
 	c := this
 

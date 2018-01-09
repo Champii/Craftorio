@@ -44,8 +44,10 @@ export class Game {
     const itemService = new ItemService(app, main, this.objects);
     const itemTex: PIXI.RenderTexture = itemService.createItemTex();
 
+    const addr = `ws://${window.location.hostname}:${AppConfig.PROXY}/ws`;
+
     const socket = new SocketService(
-      'ws://127.0.0.1:' + AppConfig.PROXY + '/ws',
+      addr,
       chunkService,
       playerService,
       itemService,
@@ -53,16 +55,22 @@ export class Game {
 
     const playerSpeed = 10;
 
-    new KeyboardService(Key.Q)
+    new KeyboardService(Key.A)
       .setAction(() => {
-        app.stage.position.x += playerSpeed;
-        playerService.moveLeft(playerSpeed);
+        socket.send(JSON.stringify({
+          message: 'player_move',
+          data: {
+            ori: ORIENTATION.WEST,
+          }
+        }))
+        // app.stage.position.x += playerSpeed;
+        // playerService.moveLeft(playerSpeed);
       })
       .setReleaseAction(() => {
-        playerService.idleLeft();
+        // playerService.idleLeft();
       });
 
-    new KeyboardService(Key.S)
+      new KeyboardService(Key.S)
       .setAction(() => {
         socket.send(JSON.stringify({
           message: 'player_move',
@@ -77,23 +85,42 @@ export class Game {
         // playerService.idleDown();
       });
 
-    new KeyboardService(Key.D)
+      new KeyboardService(Key.D)
       .setAction(() => {
-        app.stage.position.x -= playerSpeed;
-        playerService.moveRight(playerSpeed);
+        socket.send(JSON.stringify({
+          message: 'player_move',
+          data: {
+            ori: ORIENTATION.EAST,
+          }
+        }))
+        // app.stage.position.x -= playerSpeed;
+        // playerService.moveRight(playerSpeed);
       })
       .setReleaseAction(() => {
-        playerService.idleRight();
+        // playerService.idleRight();
       });
 
-    new KeyboardService(Key.Z)
+      new KeyboardService(Key.W)
       .setAction(() => {
-        app.stage.position.y += playerSpeed;
-        playerService.moveUp(playerSpeed);
+          socket.send(JSON.stringify({
+            message: 'player_move',
+            data: {
+              ori: ORIENTATION.NORTH,
+            }
+          }))
+        // app.stage.position.y += playerSpeed;
+        // playerService.moveUp(playerSpeed);
       })
       .setReleaseAction(() => {
-        playerService.idleUp();
+        // playerService.idleUp();
       });
     document.body.appendChild(app.view);
+
+    const x = app.renderer.screen.right - app.renderer.screen.right / 2;
+    const y = app.renderer.screen.bottom - app.renderer.screen.bottom / 2;
+
+    app.stage.position.set(x, y);
+      // app.renderer.screen.left - app.renderer.screen.left / 2,
+      // app.renderer.screen.top - app.renderer.screen.top / 2);
   }
 }

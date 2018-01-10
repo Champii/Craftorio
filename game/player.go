@@ -15,7 +15,7 @@ type Player struct {
 
 func NewPlayer(chunk *Chunk, socket *websocket.Conn) *Player {
 	player := &Player{
-		BaseObject: *NewBaseObject(5, 5, chunk, NORTH, "Player", TYPE_PLAYER),
+		BaseObject: *NewBaseObject(0, 0, chunk, NORTH, "Player", TYPE_PLAYER, UNKNOWN),
 		Socket:     socket,
 		Inventory:  make(AmountMap),
 	}

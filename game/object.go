@@ -18,6 +18,7 @@ type Object interface {
 	GetChunk() *Chunk
 	GetOrientation() Orientation
 	GetType() Type
+	GetKind() Kind
 	String() string
 
 	GetAdjacentPos(orientation Orientation) (x, y int)
@@ -34,12 +35,13 @@ type BaseObject struct {
 	Orientation Orientation `json:"orientation"`
 	Name        string      `json:"name"`
 	Type        Type        `json:"_type"`
+	Kind        Kind        `json:"kind"`
 	UserId      int         `json:"userId"`
 }
 
 var idInc int = 0
 
-func NewBaseObject(x, y int, chunk *Chunk, ori Orientation, name string, _type Type) *BaseObject {
+func NewBaseObject(x, y int, chunk *Chunk, ori Orientation, name string, _type Type, kind Kind) *BaseObject {
 	idInc++
 
 	return &BaseObject{
@@ -50,6 +52,7 @@ func NewBaseObject(x, y int, chunk *Chunk, ori Orientation, name string, _type T
 		Chunk:       chunk,
 		Name:        name,
 		Type:        _type,
+		Kind:        kind,
 		UserId:      0,
 	}
 }
@@ -88,6 +91,10 @@ func (this *BaseObject) GetOrientation() Orientation {
 
 func (this *BaseObject) GetType() Type {
 	return this.Type
+}
+
+func (this *BaseObject) GetKind() Kind {
+	return this.Kind
 }
 
 func (this *BaseObject) SetChunk(chunk *Chunk) {

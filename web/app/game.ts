@@ -1,3 +1,4 @@
+
 import * as _ from 'lodash';
 import * as PIXI from 'pixi.js';
 // tslint:disable-next-line:no-implicit-dependencies
@@ -17,6 +18,7 @@ import {
   KeyboardService,
   PlayerService,
   SocketService,
+  GuiService,
   TileService } from './services';
 
 export class Game {
@@ -39,10 +41,14 @@ export class Game {
   private onLoad(event: any) {
     const main = new Main(0, 0);
     const app = new App(this.gameLoop, main);
-    const chunkService = new ChunkService(main);
-    const playerService = new PlayerService(app, this.objects);
+    const guiService= new GuiService(app);
+    const tileService = new TileService(app, main);
+    const chunkService = new ChunkService(main, tileService);
+    const playerService = new PlayerService(app, main, this.objects);
     const itemService = new ItemService(app, main, this.objects);
     const itemTex: PIXI.RenderTexture = itemService.createItemTex();
+
+    tileService.createTextures()
 
     const addr = `ws://${window.location.hostname}:${AppConfig.PROXY}/ws`;
 
@@ -120,6 +126,7 @@ export class Game {
     const y = app.renderer.screen.bottom - app.renderer.screen.bottom / 2;
 
     app.stage.position.set(x, y);
+
       // app.renderer.screen.left - app.renderer.screen.left / 2,
       // app.renderer.screen.top - app.renderer.screen.top / 2);
   }

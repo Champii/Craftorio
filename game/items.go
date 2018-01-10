@@ -10,7 +10,7 @@ type CoalItem struct {
 
 func NewCoalItem(chunk *Chunk, x, y int) *CoalItem {
 	coalItem := &CoalItem{
-		BaseObject: *NewBaseObject(x, y, chunk, NORTH, "CoalItem", TYPE_ITEM),
+		BaseObject: *NewBaseObject(x, y, chunk, NORTH, "CoalItem", TYPE_ITEM, COAL),
 	}
 
 	GAME.Broadcast(coalItem)

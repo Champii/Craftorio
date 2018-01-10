@@ -15,7 +15,7 @@ export class PlayerService {
     'assets/graphics/entity/player/player-basic-run.png',
   ];
 
-  constructor(private app: PIXI.Application, private objects: any) {
+  constructor(private app: PIXI.Application, private container: PIXI.Container, private objects: any) {
     const width = 54;
     const height = 64;
 
@@ -36,7 +36,7 @@ export class PlayerService {
         this.anim.position.set((item.x * Config.tileSize), (item.y * Config.tileSize));
         this.anim.play();
 
-        this.app.stage.addChild(this.anim);
+        this.container.addChild(this.anim);
 
         this.objects[item.id] = this.anim;
 
@@ -182,7 +182,7 @@ export class PlayerService {
   }
 
   private handleUpdatePlayer(player: any) {
-    console.log(player)
+    // console.log(player)
     const existing = this.objects[player.id];
 
     // const x = this.app.renderer.screen.right - this.app.renderer.screen.right / 2;
@@ -205,8 +205,8 @@ export class PlayerService {
 
     this.move(xDiff, yDiff);
 
-    this.app.stage.position.x -= xDiff;
-    this.app.stage.position.y -= yDiff;
+    this.container.position.x -= xDiff;
+    this.container.position.y -= yDiff;
 
 
     // this.moveToward(ORIENTATION.SOUTH)

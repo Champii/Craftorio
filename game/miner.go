@@ -9,7 +9,7 @@ type Miner struct {
 func NewMiner(chunk *Chunk, x, y int, ori Orientation) *Miner {
 	miner := &Miner{
 		BaseMachine: BaseMachine{
-			BaseObject: *NewBaseObject(x, y, chunk, ori, "Miner", TYPE_MACHINE),
+			BaseObject: *NewBaseObject(x, y, chunk, ori, "Miner", TYPE_MACHINE, MINER),
 			Level:      1,
 			Frequency:  1,
 			LastTick:   time.Now(),

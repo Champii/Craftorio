@@ -5,7 +5,7 @@ import { Chunk } from '../interfaces';
 import { TileService } from './tile.service';
 
 export class ChunkService {
-  constructor(private main: PIXI.Container) {}
+  constructor(private main: PIXI.Container, private tileService: TileService) {}
 
   public render(chunk: Chunk): void {
     let x = 0;
@@ -15,11 +15,13 @@ export class ChunkService {
 
     _.forEach(chunk.data, (row: any) => {
       _.forEach(row, (tile: any) => {
-        const tileService = new TileService(chunkContainer);
-        tileService.create(x, y, tile);
+        this.tileService.create(x + chunk.x * 32 * Config.tileSize, y + chunk.y * 32 * Config.tileSize, tile);
+
         x += Config.tileSize;
       });
+
       y += Config.tileSize;
+
       x = 0;
     });
 

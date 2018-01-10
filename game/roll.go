@@ -18,6 +18,7 @@ func NewRoll(chunk *Chunk, x, y int, or Orientation) *Roll {
 				Chunk:       chunk,
 				Name:        "Roll",
 				Type:        TYPE_MACHINE,
+				Kind:        ROLL,
 				UserId:      0,
 			},
 			Level:     1,

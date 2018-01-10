@@ -23,15 +23,15 @@ export class PlayerService {
     this.rectangles[ORIENTATION.WEST] = new PIXI.Rectangle(17, 94, width, height);
   }
 
-  public createPlayer(item: any, itemTex: PIXI.RenderTexture, onComplete?: () => void) {
+  public createPlayer(item: any, onComplete?: () => void) {
     this.item = item;
 
     return PIXI.loader
       .add(this.sprites)
       .load(() => {
-        this.anim = new PIXI.extras.AnimatedSprite(this.getPlayerBasicIdleFrames(item, ORIENTATION.NORTH));
+        this.anim = new PIXI.extras.AnimatedSprite(this.getPlayerBasicIdleFrames(ORIENTATION.NORTH));
 
-        this.anim.anchor.set(0.5);
+        // this.anim.anchor.set(0.5);
         this.anim.animationSpeed = 0.5;
         this.anim.position.set((item.x * Config.tileSize), (item.y * Config.tileSize));
         this.anim.play();
@@ -39,6 +39,7 @@ export class PlayerService {
         this.container.addChild(this.anim);
 
         this.objects[item.id] = this.anim;
+
 
         onComplete();
       })
@@ -48,25 +49,25 @@ export class PlayerService {
   public idleDown(): void {
     this.isMoving = false;
 
-    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(this.item, ORIENTATION.SOUTH));
+    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(ORIENTATION.SOUTH));
   }
 
   public idleLeft(): void {
     this.isMoving = false;
 
-    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(this.item, ORIENTATION.WEST));
+    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(ORIENTATION.WEST));
   }
 
   public idleRight(): void {
     this.isMoving = false;
 
-    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(this.item, ORIENTATION.EAST));
+    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(ORIENTATION.EAST));
   }
 
   public idleUp(): void {
     this.isMoving = false;
 
-    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(this.item, ORIENTATION.NORTH));
+    this.reloadPlayerFrames(this.getPlayerBasicIdleFrames(ORIENTATION.NORTH));
   }
 
   public move(xDiff: number, yDiff: number) {
@@ -80,7 +81,7 @@ export class PlayerService {
 
   public moveToward(orientation: number, speed = 5): void {
     if (this.orientation !== orientation || !this.isMoving) {
-      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(this.item, orientation));
+      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(orientation));
 
       this.orientation = orientation;
     }
@@ -105,7 +106,7 @@ export class PlayerService {
 
   public moveLeft(speed = 5): void {
     if (this.orientation !== ORIENTATION.WEST || !this.isMoving) {
-      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(this.item, ORIENTATION.WEST));
+      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(ORIENTATION.WEST));
 
       this.orientation = ORIENTATION.WEST;
     }
@@ -115,7 +116,7 @@ export class PlayerService {
 
   public moveRight(speed = 5) {
     if (this.orientation !== ORIENTATION.EAST || !this.isMoving) {
-      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(this.item, ORIENTATION.EAST));
+      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(ORIENTATION.EAST));
 
       this.orientation = ORIENTATION.EAST;
     }
@@ -125,7 +126,7 @@ export class PlayerService {
 
   public moveUp(speed = 5) {
     if (this.orientation !== ORIENTATION.NORTH || !this.isMoving) {
-      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(this.item, ORIENTATION.NORTH));
+      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(ORIENTATION.NORTH));
 
       this.orientation = ORIENTATION.NORTH;
     }
@@ -135,7 +136,7 @@ export class PlayerService {
 
   public moveDown(speed = 5) {
     if (this.orientation !== ORIENTATION.SOUTH || !this.isMoving) {
-      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(this.item, ORIENTATION.SOUTH));
+      this.reloadPlayerFrames(this.getPlayerBasicRunFrames(ORIENTATION.SOUTH));
 
       this.orientation = ORIENTATION.SOUTH;
     }
@@ -145,13 +146,13 @@ export class PlayerService {
 
   public updatePlayer(player: any,  itemTex: PIXI.RenderTexture) {
     if (!this.objects[player.id]) {
-      const playerCreation = this.createPlayer(player, itemTex, () => this.handleUpdatePlayer(player));
+      const playerCreation = this.createPlayer(player, () => this.handleUpdatePlayer(player));
     } else {
       this.handleUpdatePlayer(player);
     }
   }
 
-  private getPlayerFrames(item: any, orientation: ORIENTATION, spritePath: string, sprites: SpriteItem[]) {
+  private getPlayerFrames(orientation: ORIENTATION, spritePath: string, sprites: SpriteItem[]) {
     const frames: PIXI.Texture[] = [];
 
     const baseTexture = PIXI.utils.TextureCache[spritePath] as PIXI.BaseTexture;
@@ -169,16 +170,16 @@ export class PlayerService {
     return frames;
   }
 
-  private getPlayerBasicIdleFrames(item: any, orientation: ORIENTATION): PIXI.Texture[] {
+  private getPlayerBasicIdleFrames(orientation: ORIENTATION): PIXI.Texture[] {
     const spritePath = 'assets/graphics/entity/player/player-basic-idle.png';
 
-    return this.getPlayerFrames(item, orientation, spritePath, playerBasicIdleSprites);
+    return this.getPlayerFrames(orientation, spritePath, playerBasicIdleSprites);
   }
 
-  private getPlayerBasicRunFrames(item: any, orientation: ORIENTATION): PIXI.Texture[] {
+  private getPlayerBasicRunFrames(orientation: ORIENTATION): PIXI.Texture[] {
     const spritePath = 'assets/graphics/entity/player/player-basic-run.png';
 
-    return this.getPlayerFrames(item, orientation, spritePath, playerBasicRunSprite);
+    return this.getPlayerFrames(orientation, spritePath, playerBasicRunSprite);
   }
 
   private handleUpdatePlayer(player: any) {

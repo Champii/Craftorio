@@ -6,3 +6,4 @@ export * from './socket.service';
 export * from './tile.service';
 export * from './gui.service';
 export * from './buildQueue.service';
+export * from './sprites.service';

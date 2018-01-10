@@ -1,7 +1,10 @@
 import * as PIXI from 'pixi.js';
 
 import { Config } from '../config';
-import {OutlineFilter} from '@pixi/filter-outline';
+
+import { OutlineFilter } from '@pixi/filter-outline';
+
+import { SpritesService } from './';
 
 const colors: number[] = [
   0x44AD44,
@@ -20,7 +23,7 @@ export class TileService {
   public static textures: PIXI.Texture[] = [];
   public static filters: PIXI.Filter<any>[] = [];
 
-  constructor(private app: PIXI.Application, private container: PIXI.Container) {
+  constructor(private app: PIXI.Application, private container: PIXI.Container, private spritesService: SpritesService) {
     TileService.filters.push(new OutlineFilter(2, 0x000000))
   }
 
@@ -28,8 +31,16 @@ export class TileService {
     let sprite: PIXI.Sprite;
 
     if (tile.machine != null){
-      console.log(tile.machine)
-      sprite = new PIXI.Sprite(TileService.textures[tile.machine.kind])
+      // sprite = new PIXI.Sprite(TileService.textures[tile.machine.kind])
+      const asprite = new PIXI.extras.AnimatedSprite(this.spritesService.frames[0])
+      asprite.animationSpeed = 0.5;
+      asprite.play();
+
+      this.container.addChild(asprite);
+      sprite.position.set(x, y);
+
+      return
+
     } else if (tile.resources != null) {
       sprite = new PIXI.Sprite(TileService.textures[tile.resources[0].kind])
     } else {

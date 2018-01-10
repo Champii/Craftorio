@@ -15,6 +15,7 @@ import { Chunk, Resource } from './interfaces';
 import {
   ChunkService,
   ItemService,
+  SpritesService,
   KeyboardService,
   PlayerService,
   SocketService,
@@ -41,27 +42,30 @@ export class Game {
   private onLoad(event: any) {
     const main = new Main(0, 0);
     const app = new App(this.gameLoop, main);
-    const guiService= new GuiService(app);
-    const tileService = new TileService(app, main);
-    const chunkService = new ChunkService(main, tileService);
-    const playerService = new PlayerService(app, main, this.objects);
-    const itemService = new ItemService(app, main, this.objects);
-    const itemTex: PIXI.RenderTexture = itemService.createItemTex();
+    const spritesService= new SpritesService(app, () => {
 
-    tileService.createTextures()
+      const guiService= new GuiService(app);
+      const tileService = new TileService(app, main, spritesService);
+      const chunkService = new ChunkService(main, tileService);
+      const playerService = new PlayerService(app, main, this.objects);
+      const itemService = new ItemService(app, main, this.objects);
+      const itemTex: PIXI.RenderTexture = itemService.createItemTex();
 
-    const addr = `ws://${window.location.hostname}:${AppConfig.PROXY}/ws`;
+      tileService.createTextures()
 
-    const socket = new SocketService(
-      addr,
-      chunkService,
-      playerService,
-      itemService,
-      itemTex);
 
-    const playerSpeed = 10;
+      const addr = `ws://${window.location.hostname}:${AppConfig.PROXY}/ws`;
 
-    new KeyboardService(Key.A)
+      const socket = new SocketService(
+        addr,
+        chunkService,
+        playerService,
+        itemService,
+        itemTex);
+
+      const playerSpeed = 10;
+
+      new KeyboardService(Key.A)
       .setAction(() => {
         socket.send(JSON.stringify({
           message: 'player_move',
@@ -108,26 +112,27 @@ export class Game {
 
       new KeyboardService(Key.W)
       .setAction(() => {
-          socket.send(JSON.stringify({
-            message: 'player_move',
-            data: {
-              ori: ORIENTATION.NORTH,
-            }
-          }))
+        socket.send(JSON.stringify({
+          message: 'player_move',
+          data: {
+            ori: ORIENTATION.NORTH,
+          }
+        }))
         // app.stage.position.y += playerSpeed;
         // playerService.moveUp(playerSpeed);
       })
       .setReleaseAction(() => {
         // playerService.idleUp();
       });
-    document.body.appendChild(app.view);
+      document.body.appendChild(app.view);
 
-    const x = app.renderer.screen.right - app.renderer.screen.right / 2;
-    const y = app.renderer.screen.bottom - app.renderer.screen.bottom / 2;
+      const x = app.renderer.screen.right - app.renderer.screen.right / 2;
+      const y = app.renderer.screen.bottom - app.renderer.screen.bottom / 2;
 
-    app.stage.position.set(x, y);
+      app.stage.position.set(x, y);
 
       // app.renderer.screen.left - app.renderer.screen.left / 2,
       // app.renderer.screen.top - app.renderer.screen.top / 2);
+    });
   }
 }

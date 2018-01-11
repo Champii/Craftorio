@@ -1,4 +1,4 @@
-import { GuiItem } from './';
+import { GuiItem } from './guiItem.service';
 
 export class BuildQueueService extends GuiItem {
   constructor(protected app: PIXI.Application) {

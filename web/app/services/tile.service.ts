@@ -34,7 +34,7 @@ export class TileService {
     let sprite: PIXI.Sprite;
 
     if (tile.machine != null) {
-      // sprite = new PIXI.Sprite(TileService.textures[tile.machine.kind])
+      sprite = new PIXI.Sprite(TileService.textures[tile.machine.kind]);
       const asprite = new PIXI.extras.AnimatedSprite(this.spritesService.frames[0]);
       asprite.animationSpeed = 0.5;
       asprite.play();

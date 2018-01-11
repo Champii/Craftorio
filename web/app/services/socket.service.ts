@@ -36,7 +36,6 @@ export class SocketService {
   public _onmessage(info: any) {
     const item = JSON.parse(info.data);
 
-
     if (item.name === 'Chunk') {
       this.chunkService.render(item);
     } else if (item.name === 'CoalItem') {
@@ -44,7 +43,7 @@ export class SocketService {
     } else if (item.name === 'Player') {
       this.playerService.updatePlayer(item, this.itemTex);
     } else {
-      console.log(item)
+      console.info(item);
     }
   }
 

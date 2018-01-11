@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 
 import { Config } from '../config';
 
+// tslint:disable-next-line:no-implicit-dependencies
 import { OutlineFilter } from '@pixi/filter-outline';
 
 import { SpritesService } from './';
@@ -17,48 +18,50 @@ const colors: number[] = [
   0,
   0xCC3344,
   0x996644,
-]
+];
 
 export class TileService {
   public static textures: PIXI.Texture[] = [];
-  public static filters: PIXI.Filter<any>[] = [];
+  public static filters: Array<PIXI.Filter<any>> = [];
 
-  constructor(private app: PIXI.Application, private container: PIXI.Container, private spritesService: SpritesService) {
-    TileService.filters.push(new OutlineFilter(2, 0x000000))
+  constructor(private app: PIXI.Application,
+              private container: PIXI.Container,
+              private spritesService: SpritesService) {
+    TileService.filters.push(new OutlineFilter(2, 0x000000));
   }
 
   public create(x: number, y: number, tile: any) {
     let sprite: PIXI.Sprite;
 
-    if (tile.machine != null){
+    if (tile.machine != null) {
       // sprite = new PIXI.Sprite(TileService.textures[tile.machine.kind])
-      const asprite = new PIXI.extras.AnimatedSprite(this.spritesService.frames[0])
+      const asprite = new PIXI.extras.AnimatedSprite(this.spritesService.frames[0]);
       asprite.animationSpeed = 0.5;
       asprite.play();
 
       this.container.addChild(asprite);
       sprite.position.set(x, y);
 
-      return
+      return;
 
     } else if (tile.resources != null) {
-      sprite = new PIXI.Sprite(TileService.textures[tile.resources[0].kind])
+      sprite = new PIXI.Sprite(TileService.textures[tile.resources[0].kind]);
     } else {
-      sprite = new PIXI.Sprite(TileService.textures[0])
+      sprite = new PIXI.Sprite(TileService.textures[0]);
     }
 
     // rectangle.x = x;
     // rectangle.y = y;
     sprite.position.set(x, y);
 
-    sprite.interactive = true
+    sprite.interactive = true;
     sprite.on('pointerover', () => {
       // console.log(e)
-      sprite.filters = [TileService.filters[0]]
+      sprite.filters = [TileService.filters[0]];
     });
     sprite.on('pointerout', () => {
       // console.log(e)
-      sprite.filters = []
+      sprite.filters = [];
     });
 
     // const a: any = rectangle;
@@ -68,16 +71,14 @@ export class TileService {
   }
 
   public createTextures() {
-    for (let color of colors) {
+    for (const color of colors) {
       const rectangle = new PIXI.Graphics();
       rectangle.lineStyle(0, 0x000000, 1);
       rectangle.beginFill(color);
       rectangle.drawRect(0, 0, Config.tileSize, Config.tileSize);
       rectangle.endFill();
-      TileService.textures.push(this.app.renderer.generateTexture(rectangle))
+      TileService.textures.push(this.app.renderer.generateTexture(rectangle));
     }
-
-
 
     // if (tile.machine != null) {
     //   if (tile.machine.name === 'Miner') {

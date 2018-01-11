@@ -14,13 +14,15 @@ import { Main } from './main';
 import { Chunk, Resource } from './interfaces';
 import {
   ChunkService,
+  GuiService,
   ItemService,
-  SpritesService,
   KeyboardService,
   PlayerService,
   SocketService,
-  GuiService,
+  SpritesService,
   TileService } from './services';
+
+// tslint:disable:object-literal-sort-keys
 
 export class Game {
   private objects: { [index: number]: PIXI.Sprite} = {};
@@ -42,17 +44,16 @@ export class Game {
   private onLoad(event: any) {
     const main = new Main(0, 0);
     const app = new App(this.gameLoop, main);
-    const spritesService= new SpritesService(app, () => {
+    const spritesService = new SpritesService(app, () => {
 
-      const guiService= new GuiService(app);
+      const guiService = new GuiService(app);
       const tileService = new TileService(app, main, spritesService);
       const chunkService = new ChunkService(main, tileService);
       const playerService = new PlayerService(app, main, this.objects);
       const itemService = new ItemService(app, main, this.objects);
       const itemTex: PIXI.RenderTexture = itemService.createItemTex();
 
-      tileService.createTextures()
-
+      tileService.createTextures();
 
       const addr = `ws://${window.location.hostname}:${AppConfig.PROXY}/ws`;
 
@@ -71,8 +72,8 @@ export class Game {
           message: 'player_move',
           data: {
             ori: ORIENTATION.WEST,
-          }
-        }))
+          },
+        }));
         // app.stage.position.x += playerSpeed;
         // playerService.moveLeft(playerSpeed);
       })
@@ -86,8 +87,8 @@ export class Game {
           message: 'player_move',
           data: {
             ori: ORIENTATION.SOUTH,
-          }
-        }))
+          },
+        }));
         // app.stage.position.y -= playerSpeed;
         // playerService.moveDown(playerSpeed);
       })
@@ -101,8 +102,8 @@ export class Game {
           message: 'player_move',
           data: {
             ori: ORIENTATION.EAST,
-          }
-        }))
+          },
+        }));
         // app.stage.position.x -= playerSpeed;
         // playerService.moveRight(playerSpeed);
       })
@@ -116,8 +117,8 @@ export class Game {
           message: 'player_move',
           data: {
             ori: ORIENTATION.NORTH,
-          }
-        }))
+          },
+        }));
         // app.stage.position.y += playerSpeed;
         // playerService.moveUp(playerSpeed);
       })

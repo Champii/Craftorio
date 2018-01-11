@@ -7,3 +7,6 @@ export * from './tile.service';
 export * from './gui.service';
 export * from './buildQueue.service';
 export * from './sprites.service';
+export * from './guiItem.service';
+export * from './inventory.service';
+export * from './minimap.service';

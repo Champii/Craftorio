@@ -40,7 +40,6 @@ export class PlayerService {
 
         this.objects[item.id] = this.anim;
 
-
         onComplete();
       })
     ;
@@ -89,16 +88,16 @@ export class PlayerService {
     switch (orientation) {
       case ORIENTATION.NORTH:
         this.moveUp(speed);
-        break
+        break;
         case ORIENTATION.EAST:
         this.moveRight(speed);
-        break
+        break;
         case ORIENTATION.SOUTH:
         this.moveDown(speed);
-        break
+        break;
         case ORIENTATION.WEST:
         this.moveLeft(speed);
-        break
+        break;
     }
 
     // this.move(-speed, 0);
@@ -195,12 +194,6 @@ export class PlayerService {
 
     // existing.position.set(player.x * Config.tileSize, player.y * Config.tileSize);
 
-
-
-
-
-
-
     const xDiff = (player.x * Config.tileSize) - existing.x;
     const yDiff = (player.y * Config.tileSize) - existing.y;
 
@@ -208,7 +201,6 @@ export class PlayerService {
 
     this.container.position.x -= xDiff;
     this.container.position.y -= yDiff;
-
 
     // this.moveToward(ORIENTATION.SOUTH)
   }

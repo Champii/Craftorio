@@ -129,7 +129,6 @@ export class Game {
 
       const x = app.renderer.screen.right - app.renderer.screen.right / 2;
       const y = app.renderer.screen.bottom - app.renderer.screen.bottom / 2;
-
       app.stage.position.set(x, y);
 
       // app.renderer.screen.left - app.renderer.screen.left / 2,

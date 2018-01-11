@@ -35,7 +35,6 @@ export class PlayerService {
         this.anim.animationSpeed = 0.5;
         this.anim.position.set((item.x * Config.tileSize), (item.y * Config.tileSize));
         this.anim.play();
-
         this.container.addChild(this.anim);
 
         this.objects[item.id] = this.anim;
@@ -162,7 +161,6 @@ export class PlayerService {
       const rectangle = new PIXI.Rectangle(x, y, width, height);
 
       const texture = new PIXI.Texture(baseTexture, rectangle);
-
       frames.push(texture);
     });
 

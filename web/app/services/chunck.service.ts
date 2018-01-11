@@ -16,7 +16,7 @@ export class ChunkService {
 
     _.forEach(chunk.data, (row: any) => {
       _.forEach(row, (tile: any) => {
-        this.tileService.create(x + chunk.x * 32 * Config.tileSize, y + chunk.y * 32 * Config.tileSize, tile);
+        this.tileService.create(tile, x + chunk.x * 32 * Config.tileSize, y + chunk.y * 32 * Config.tileSize);
 
         x += Config.tileSize;
       });

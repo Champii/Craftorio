@@ -30,7 +30,7 @@ export class TileService {
     TileService.filters.push(new OutlineFilter(2, 0x000000));
   }
 
-  public create(x: number, y: number, tile: any) {
+  public create(tile: any, x: number, y: number, z: number = 0) {
     let sprite: PIXI.Sprite;
 
     if (tile.machine != null) {
@@ -68,6 +68,7 @@ export class TileService {
     // a.vx = 0;
     // a.vy = 0;
     this.container.addChild(sprite);
+    this.container.setChildIndex(sprite, z);
   }
 
   public createTextures() {
